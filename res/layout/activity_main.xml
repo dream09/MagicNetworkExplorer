@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MagicNetworkExplorer" >
+
+    <TextView
+		android:id="@+id/main_ipaddress_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		style="?android:attr/listSeparatorTextViewStyle"
+		android:text="@string/main_ipaddress_title"/>
+    
+    <TextView
+        android:id="@+id/main_ipaddress"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/main_ipaddress_title"
+        android:text="@string/main_ipaddress_error"/>
+
+    <TextView
+		android:id="@+id/main_scanner_status_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_below="@id/main_ipaddress"
+		style="?android:attr/listSeparatorTextViewStyle"
+		android:text="@string/main_scanner_status_title"/>
+    
+    <TextView
+        android:id="@+id/main_scanner_status"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/main_scanner_status_title"
+        android:text="@string/main_scanner_status_idle"/>
+    
+    <TextView
+		android:id="@+id/main_scanner_found_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_below="@id/main_scanner_status"
+		style="?android:attr/listSeparatorTextViewStyle"
+		android:text="@string/main_scanner_found_title"/>
+    
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_scanner_found_title"/>
+
+</RelativeLayout>

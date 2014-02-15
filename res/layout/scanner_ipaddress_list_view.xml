@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@drawable/scanner_ipaddress_list_item_background">
+	
+    <ImageView 
+        android:id="@+id/tel_icon"
+        android:focusable="false"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:contentDescription="@string/scanner_list_icon_desc"
+        android:background="@drawable/ic_menu_notifications"/>
+    
+     <TextView 
+	        android:text="@+id/ItemName"
+	        android:id="@+id/ItemName"
+	        android:focusable="false"
+	        android:layout_height="fill_parent"
+	        android:layout_width="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_marginLeft="8dp"
+	        android:gravity="center_vertical"
+	        android:textAppearance="@android:style/TextAppearance.Medium"
+	        android:singleLine="true"/>
+	    
+	    <TextView 
+	        android:text="@+id/ItemIP"
+	        android:id="@+id/ItemIP"
+	        android:focusable="false"
+	        android:layout_height="fill_parent"
+	        android:layout_width="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_marginLeft="8dp"
+	        android:layout_marginRight="8dp"
+	        android:gravity="bottom|right"
+	        android:textAppearance="@android:style/TextAppearance.Small"
+	        android:textStyle="bold"
+	        android:singleLine="true"/>
+    
+
+</LinearLayout>
+
