@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import jcifs.netbios.NbtAddress;
@@ -30,7 +29,8 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
+
+
 
 /**
  * MagicNetworkExplorer provides a simple local (WiFi) network attached device
@@ -43,7 +43,6 @@ public class MagicNetworkExplorer extends ListActivity {
 	static final String TAG = "MainActivity";
 	
 	/* Variables */
-	public static final int NETWORK_REQUEST = 0;
 	public static final String KEY_SEND_TITLE = "title";
 	public static final String KEY_RETURN_IPADDRESS = "ipaddress";
 	public static final String KEY_RETURN_NAME = "name";
@@ -99,7 +98,7 @@ public class MagicNetworkExplorer extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.explorer_menu, menu);
 		
 		this.actionMenu = menu;
 		if (scanner != null)
@@ -116,7 +115,7 @@ public class MagicNetworkExplorer extends ListActivity {
 			startNetworkScanner();
 		}
 		
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 	
 	
@@ -199,7 +198,7 @@ public class MagicNetworkExplorer extends ListActivity {
 				adapter.notifyDataSetChanged();
 			}
 		} else {
-			Toast.makeText(this, getString(R.string.main_scanner_toast_noresults), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, getString(R.string.main_scanner_toast_noresults), Toast.LENGTH_SHORT).show();
 		}
 	}
 	
