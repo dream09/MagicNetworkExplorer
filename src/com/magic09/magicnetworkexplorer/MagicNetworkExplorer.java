@@ -70,6 +70,11 @@ public class MagicNetworkExplorer extends ListActivity {
 			if (myTitle != null && myTitle.length() > 0)
 				this.setTitle(myTitle);
 		}
+		
+		// Setup list adapter.
+		IPAddresses = new ArrayList<Map<String,String>>();
+		adapter = new NetworkScanResultAdapter(this, R.layout.scanner_ipaddress_list_view, IPAddresses);
+		setListAdapter(adapter);
 	}
 	
 	@Override
@@ -185,21 +190,21 @@ public class MagicNetworkExplorer extends ListActivity {
 	}
 	
 	/**
-	 * Method displays results (ipaddresses found) in the list.
+	 * Method clears the scan results shown in the list view.
+	 */
+	private void cleanScanResults() {
+		IPAddresses.clear();
+		adapter.notifyDataSetChanged();
+	}
+	
+	/**
+	 * Method adds the argument result to the list and calls
+	 * for the list view to be updated.
 	 * @param result
 	 */
-	private void displayScanResult(List<Map<String, String>> result) {
-		if (result != null && result.size() > 0) {
-			IPAddresses = result;
-			if (adapter == null){
-				adapter = new NetworkScanResultAdapter(this, R.layout.scanner_ipaddress_list_view, IPAddresses);
-				setListAdapter(adapter);
-			} else {
-				adapter.notifyDataSetChanged();
-			}
-		} else {
-			//Toast.makeText(this, getString(R.string.main_scanner_toast_noresults), Toast.LENGTH_SHORT).show();
-		}
+	private void addScanResult(Map<String, String> result) {
+		IPAddresses.add(result);
+		adapter.notifyDataSetChanged();
 	}
 	
 	/**
@@ -293,35 +298,31 @@ public class MagicNetworkExplorer extends ListActivity {
 	 * @author dream09
 	 *
 	 */
-	private class NetworkScanner extends AsyncTask<String, Void, List<Map<String, String>>> {
+	private class NetworkScanner extends AsyncTask<String, String, Void> {
 		
-		//static final String TAG = "NetworkScanner";
+		static final String TAG = "NetworkScanner";
 		
 		/* Variables */
-		public static final int SCAN_TIMEOUT = 200;
-		private List<Map<String, String>> result;
-		private String currentHost;
+		public static final int SCAN_TIMEOUT = 300;
 		
 		
 		
 		/* Overridden methods */
 		
 		@Override
-		protected List<Map<String, String>> doInBackground(String... subnetList) {
+		protected Void doInBackground(String... subnetList) {
 			
 			// Get subnet.
 			String ipAddress = subnetList[0];
 			String subnet = ipAddress.substring(0, ipAddress.lastIndexOf("."));
-			
-			// Prepare return.
-			result = new ArrayList<Map<String,String>>();
+			String currentHost;
 			
 			// Loop through all possible values.
 			for (int i=1; i<=255; i++) {
 				
 				// Continually check if we've been cancelled and handle.
 				if (isCancelled()) {
-					//Log.d(TAG, "We've been canceled!");
+					//Log.d(TAG, "We've been cancelled!");
 					break;
 				}
 				
@@ -331,7 +332,8 @@ public class MagicNetworkExplorer extends ListActivity {
 					continue;
 				
 				// Update status display.
-				publishProgress();
+				String[] ipPass = {currentHost};
+				publishProgress(ipPass);
 				//System.out.println("scanning " + host);
 				
 				// Check if we can reach this address.
@@ -374,11 +376,9 @@ public class MagicNetworkExplorer extends ListActivity {
 						}
 						
 						if (ipActive) {
-							HashMap<String, String> addressToSave = new HashMap<String, String>();
-							addressToSave.put(NetworkScanResultAdapter.KEY_NAME, addressInfo.getHostName());
-							addressToSave.put(NetworkScanResultAdapter.KEY_IPADDRESS, currentHost);
-							result.add(addressToSave);
-							publishProgress();
+							//Log.d(TAG, "Passing " + addressInfo.getHostName());
+							String[] dataPass = {currentHost, addressInfo.getHostName(), currentHost};
+							publishProgress(dataPass);
 						}
 						
 					} catch (UnknownHostException e) {
@@ -386,24 +386,32 @@ public class MagicNetworkExplorer extends ListActivity {
 				}
 			}
 			
-			return result;
+			return null;
 		}
 		
 		@Override
 		protected void onPreExecute() {
 			setRefreshActionButtonState(true);
+			cleanScanResults();
 		}
 		
 		@Override
-		protected void onPostExecute(List<Map<String, String>> result) {
+		protected void onPostExecute(Void result) {
 			cleanUpNetworkScanner();
-			displayScanResult(result);
 		}
 		
 		@Override
-		protected void onProgressUpdate(Void... values) {
-			setScanningIP(currentHost);
-			displayScanResult(result);
+		protected void onProgressUpdate(String... values) {
+			if (values != null) {
+				setScanningIP(values[0]);
+				if (values.length == 3) {
+					HashMap<String, String> addressToSave = new HashMap<String, String>();
+					addressToSave.put(NetworkScanResultAdapter.KEY_NAME, values[1]);
+					addressToSave.put(NetworkScanResultAdapter.KEY_IPADDRESS, values[2]);
+					addScanResult(addressToSave);
+				}
+			}
+				
 		}
 	}
 	
